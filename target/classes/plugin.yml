@@ -1,0 +1,5 @@
+name: mmoblockrespawn
+main: ca.lightnet.mmoblockrespawn.Plugin
+version: 1.0
+api-version: 1.15
+description: Regenerate blocks based on location
