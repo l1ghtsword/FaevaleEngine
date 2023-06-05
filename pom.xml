@@ -21,22 +21,22 @@
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
-      		<id>glaremasters repo</id>
+      		<id>glaremasters-repo</id>
       		<url>https://repo.glaremasters.me/repository/towny/</url>
     	</repository>
 	</repositories>
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.19.4-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.palmergames.bukkit.towny</groupId>
+			<artifactId>towny</artifactId>
+			<version>0.99.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
