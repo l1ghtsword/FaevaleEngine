@@ -16,11 +16,14 @@
 	</properties>
 
 	<repositories>
-		<!-- This adds the Spigot Maven repository to the build -->
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
+		<repository>
+      		<id>glaremasters repo</id>
+      		<url>https://repo.glaremasters.me/repository/towny/</url>
+    	</repository>
 	</repositories>
 
 	<dependencies>
@@ -30,11 +33,10 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-		<!--This adds the Spigot API artifact to the build -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.15.1-R0.1-SNAPSHOT</version>
+			<version>1.19.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
@@ -73,4 +75,31 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+
+	<dependencyManagement>
+	
+
+		<dependencies>
+
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.10</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>32.0.0-jre</version>
+			</dependency>
+
+		
+
+			
+
+		</dependencies>
+
+	</dependencyManagement>
 </project>
