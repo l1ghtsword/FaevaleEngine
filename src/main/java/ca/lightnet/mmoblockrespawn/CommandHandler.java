@@ -12,10 +12,10 @@ public class CommandHandler implements CommandExecutor{
             Player player = (Player) sender;
             String block = args[0];
             //Demo command for test
-            Plugin.LOGGER.info("Regenerating " + block + " for " + player.getName());
+            MmoBlockRespawn.LOGGER.info("Regenerating " + block + " for " + player.getName());
             return true;
         }else{
-            Plugin.LOGGER.info("Command Not Found");
+            MmoBlockRespawn.LOGGER.info("Command Not Found");
             return false;
         }
     }
