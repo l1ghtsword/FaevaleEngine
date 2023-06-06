@@ -6,7 +6,6 @@ import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class RespawnBlockTask extends BukkitRunnable {
-
     MmoBlockRespawn plugin;
     Material material;
     Block block;

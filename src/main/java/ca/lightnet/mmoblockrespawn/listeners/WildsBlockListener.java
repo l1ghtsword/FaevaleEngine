@@ -13,7 +13,6 @@ import org.bukkit.scheduler.BukkitTask;
 public class WildsBlockListener implements Listener{
     private final String debug;
     private final MmoBlockRespawn plugin;
-
     public WildsBlockListener(MmoBlockRespawn plugin) {
         this.plugin = plugin;
         FileConfiguration config = plugin.getConfig();

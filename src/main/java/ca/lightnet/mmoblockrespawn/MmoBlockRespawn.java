@@ -18,7 +18,6 @@ public final class MmoBlockRespawn extends JavaPlugin
     //Events
     Bukkit.getServer().getPluginManager().registerEvents(new WildsBlockListener(this), this);
   }
-
   public void onDisable()
   {
     LOGGER.info("mmoblockrespawn disabled");
