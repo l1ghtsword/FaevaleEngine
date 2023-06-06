@@ -1,6 +1,7 @@
 package ca.lightnet.mmoblockrespawn.listeners;
 
 import ca.lightnet.mmoblockrespawn.tasks.RespawnBlockTask;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,12 +12,12 @@ import ca.lightnet.mmoblockrespawn.MmoBlockRespawn;
 import org.bukkit.scheduler.BukkitTask;
 
 public class WildsBlockListener implements Listener{
-    private final String debug;
+    private final Boolean debug;
     private final MmoBlockRespawn plugin;
     public WildsBlockListener(MmoBlockRespawn plugin) {
         this.plugin = plugin;
         FileConfiguration config = plugin.getConfig();
-        debug = (String) config.get("debug");
+        debug = (Boolean) config.get("debug");
     }
     @EventHandler
     public void onWildsBlockBuild(TownyDestroyEvent e) {
@@ -24,15 +25,15 @@ public class WildsBlockListener implements Listener{
         if (!e.isInWilderness()) { return; }
         if(e.getPlayer().isOp()) { return; }
 
-        if (debug.equals("true")) {
+        if (debug) {
             MmoBlockRespawn.LOGGER.info("**Event is in wilderness**");
             MmoBlockRespawn.LOGGER.info(e.getPlayer().getName() + " just broke " + e.getMaterial());
         }
 
-        Block currentBlock = e.getBlock().getLocation().getBlock();
-        Material currentMaterial = currentBlock.getType();
+        Location blockLoc = e.getLocation();
+        Material blockMaterial = e.getMaterial();
 
-        currentBlock.setType(Material.BEDROCK);
-        BukkitTask task = new RespawnBlockTask(plugin,currentMaterial,currentBlock).runTaskLaterAsynchronously(plugin,100L);
+        blockLoc.getBlock().setType(Material.BEDROCK);
+        BukkitTask task = new RespawnBlockTask(plugin,blockMaterial,blockLoc).runTaskLaterAsynchronously(plugin,100L);
     }
 }
