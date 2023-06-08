@@ -1,7 +1,11 @@
 name: MmoBlockRespawn
 main: ca.lightnet.mmoblockrespawn.MmoBlockRespawn
-version: 1.2.2
+version: 1.2.3
 api-version: 1.19
 description: Regenerate blocks based on location
-depend: [Towny]
-softdepend: []
+depend:
+  - Towny
+commands:
+  regen:
+    description: Wilds regeneration plugin
+    usage: /<command> [debug|test|help]
