@@ -1,0 +1,5 @@
+# Verbose debugging messages (spams console)
+debug: true
+
+# Stops plugin completely, all break events will be ignored.
+enabled: true
