@@ -2,9 +2,8 @@ package ca.lightnet.mmoblockrespawn;
 
 import ca.lightnet.mmoblockrespawn.commands.CommandManager;
 import ca.lightnet.mmoblockrespawn.listeners.WildsBlockListener;
-
+import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
-
 import java.util.Objects;
 import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,7 +12,7 @@ public final class MmoBlockRespawn extends JavaPlugin
 {
   private static MmoBlockRespawn instance;
   //TODO figure out essentials...
-  //private static Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
+  private static Essentials essentials;
   public static final Logger LOGGER=Logger.getLogger("mmoblockrespawn");
 
   public void onEnable() {
@@ -21,6 +20,7 @@ public final class MmoBlockRespawn extends JavaPlugin
     LOGGER.info("mmoblockrespawn enabled");
     saveDefaultConfig();
     instance = this;
+    essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
 
     //Events
     Bukkit.getServer().getPluginManager().registerEvents(new WildsBlockListener(), this);
@@ -37,4 +37,5 @@ public final class MmoBlockRespawn extends JavaPlugin
   public static MmoBlockRespawn getInstance() {
     return instance;
   }
+  public static Essentials getEssentials() { return essentials; }
 }

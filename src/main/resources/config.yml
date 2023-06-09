@@ -4,15 +4,16 @@ debug: true
 # Stops plugin completely, all break events will be ignored.
 enabled: true
 
-#TODO
 # Should AFK players be allowed to mine blocks?
-AllowAFK: false
+allowAFK: false
 
-#TODO
 # Default regen timer it ticks (20 = 1 second)
 defaultTimer: 20
 
-#TODO
-# Comma eliminated list of MATERIAL to Regen, Resource timer,
+# Default Material to use as a placeholder until the block respawns
+defaultPlaceholder: BEDROCK
+
+# Comma delimited list of (MATERIAL to Regen),(Resource timer),(Placeholder)
+# Must require a valid Minecraft Material, timer and placeholder are optional.
 regen:
   - COBBLESTONE,20,AIR
