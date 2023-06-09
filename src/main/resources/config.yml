@@ -3,3 +3,16 @@ debug: true
 
 # Stops plugin completely, all break events will be ignored.
 enabled: true
+
+#TODO
+# Should AFK players be allowed to mine blocks?
+AllowAFK: false
+
+#TODO
+# Default regen timer it ticks (20 = 1 second)
+defaultTimer: 20
+
+#TODO
+# Comma eliminated list of MATERIAL to Regen, Resource timer,
+regen:
+  - COBBLESTONE,20,AIR
