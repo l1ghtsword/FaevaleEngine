@@ -18,7 +18,7 @@ public class WildsBlockListener implements Listener{
 
     public WildsBlockListener() {
         this.plugin = MmoBlockRespawn.getInstance();
-        this.config = plugin.getConfig();
+        this.config = MmoBlockRespawn.getConfigFile();
     }
 
     @EventHandler
@@ -45,10 +45,10 @@ public class WildsBlockListener implements Listener{
         @SuppressWarnings("unchecked")
         List<String> regenBlocklist = (List<String>) config.getList("regen");
         boolean regenerate = false;
-        long timer = Objects.requireNonNullElse(config.getLong("defaultTimer"),20L);
+        long timer = config.getLong("defaultTimer");
         Material placeholder = Material.getMaterial(Objects.requireNonNullElse(config.getString("defaultPlaceholder"),"BEDROCK"));
 
-
+        MmoBlockRespawn.LOGGER.info("timer = "+timer+"\nplaceholder = "+placeholder);
         //block all break events if regen list is unset (Panic mode)
         if (regenBlocklist == null) {
             MmoBlockRespawn.LOGGER.warning("Regen list is null, preventing block events!");
@@ -77,6 +77,7 @@ public class WildsBlockListener implements Listener{
                 }
             }
         }
+        MmoBlockRespawn.LOGGER.info("timer = "+timer+"\nplaceholder = "+placeholder+"\nRegen = "+regenerate);
         //If Material is not on the regen list, quit
         if(!regenerate) { return; }
 
@@ -84,8 +85,9 @@ public class WildsBlockListener implements Listener{
 
 
         //TODO Refactor to use Block instead for task serialization
-        new RespawnBlockTask(plugin,placeholder,e.getLocation()).runTask(plugin);
-        new RespawnBlockTask(plugin,e.getMaterial(),e.getLocation()).runTaskLater(plugin,timer);
+        new RespawnBlockTask(placeholder,e.getLocation()).runTask(plugin);
+        new RespawnBlockTask(e.getMaterial(),e.getLocation()).runTaskLater(plugin,timer);
+        MmoBlockRespawn.LOGGER.info("Tasks sent");
 
         if (config.getBoolean("debug")) {
             MmoBlockRespawn.LOGGER.info(

@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class CommandManager implements CommandExecutor{
+    FileConfiguration config = MmoBlockRespawn.getConfigFile();
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
 
@@ -27,14 +28,14 @@ public class CommandManager implements CommandExecutor{
         return true;
     }
 
-    private static String getHelp(){
+    private String getHelp(){
         return  "/regen help  - Get list of usable commands\n" +
                 "/regen debug - Toggle debugging\n" +
                 "/regen test  - For developer testing only";
     }
 
-    private static void toggleDebug(CommandSender sender) {
-        FileConfiguration config = MmoBlockRespawn.getInstance().getConfig();
+    private void toggleDebug(CommandSender sender) {
+
         Boolean status;
         String message;
 
