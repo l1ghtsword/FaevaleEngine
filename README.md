@@ -1,2 +1,2 @@
-# MMOBlockRespawn
-Private MMO Block Regeneration plugin for MMO Minecraft Servers
+# FaevaleEngine
+Internal game engine for lightnet.ca (Faevale)

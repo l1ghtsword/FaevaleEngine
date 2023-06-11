@@ -12,8 +12,8 @@
 
 #unneeded directories
 target
-.idea
-.vscode
+.idea/
+.vscode/
 
 # Package Files #
 *.jar
