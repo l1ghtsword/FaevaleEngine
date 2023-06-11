@@ -1,24 +1,24 @@
-package ca.lightnet.mmoblockrespawn.listeners;
+package ca.lightnet.FaevaleEngine.listeners;
 
-import ca.lightnet.mmoblockrespawn.tasks.RespawnBlockTask;
-import org.bukkit.*;
+import ca.lightnet.FaevaleEngine.FaevaleEngine;
+import ca.lightnet.FaevaleEngine.tasks.RespawnBlockTask;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
-import ca.lightnet.mmoblockrespawn.MmoBlockRespawn;
 
 import java.util.List;
-import java.util.Objects;
 
 public class WildsBlockListener implements Listener{
-    private final MmoBlockRespawn plugin;
+    private final FaevaleEngine plugin;
     private final FileConfiguration config;
 
 
     public WildsBlockListener() {
-        this.plugin = MmoBlockRespawn.getInstance();
-        this.config = MmoBlockRespawn.getConfigFile();
+        this.plugin = FaevaleEngine.getInstance();
+        this.config = FaevaleEngine.getConfigFile();
     }
 
     @EventHandler
@@ -33,8 +33,8 @@ public class WildsBlockListener implements Listener{
         }
 
         //AFK cancel feature
-        if (config.getBoolean("allowAFK")) {
-            if (MmoBlockRespawn.getEssentials().getUser(e.getPlayer()).isAfk()) {
+        if (!config.getBoolean("allowAFK",false)) {
+            if (FaevaleEngine.getEssentials().getUser(e.getPlayer()).isAfk()) {
                 e.setCancelMessage("&4You cannot do that while AFK");
                 e.setCancelled(true);
                 return;
@@ -45,13 +45,12 @@ public class WildsBlockListener implements Listener{
         @SuppressWarnings("unchecked")
         List<String> regenBlocklist = (List<String>) config.getList("regen");
         boolean regenerate = false;
-        long timer = config.getLong("defaultTimer");
-        Material placeholder = Material.getMaterial(Objects.requireNonNullElse(config.getString("defaultPlaceholder"),"BEDROCK"));
+        long timer = config.getLong("defaultTimer",100L);
+        Material placeholder = Material.getMaterial(config.getString("defaultPlaceholder","BEDROCK"));
 
-        MmoBlockRespawn.LOGGER.info("timer = "+timer+"\nplaceholder = "+placeholder);
         //block all break events if regen list is unset (Panic mode)
         if (regenBlocklist == null) {
-            MmoBlockRespawn.LOGGER.warning("Regen list is null, preventing block events!");
+            FaevaleEngine.LOGGER.warning("Regen list is null, preventing block events!");
             e.setCancelMessage("Regen list is null, preventing break events!");
             e.setCancelled(true);
             return;
@@ -77,7 +76,6 @@ public class WildsBlockListener implements Listener{
                 }
             }
         }
-        MmoBlockRespawn.LOGGER.info("timer = "+timer+"\nplaceholder = "+placeholder+"\nRegen = "+regenerate);
         //If Material is not on the regen list, quit
         if(!regenerate) { return; }
 
@@ -87,10 +85,9 @@ public class WildsBlockListener implements Listener{
         //TODO Refactor to use Block instead for task serialization
         new RespawnBlockTask(placeholder,e.getLocation()).runTask(plugin);
         new RespawnBlockTask(e.getMaterial(),e.getLocation()).runTaskLater(plugin,timer);
-        MmoBlockRespawn.LOGGER.info("Tasks sent");
 
         if (config.getBoolean("debug")) {
-            MmoBlockRespawn.LOGGER.info(
+            FaevaleEngine.LOGGER.info(
                     e.getPlayer().getName()+" just broke "+e.getMaterial()+
                             " - Wilderness: "+e.isInWilderness()+
                             " - Op: "+e.getPlayer().isOp()+

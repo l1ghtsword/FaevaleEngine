@@ -1,6 +1,6 @@
-package ca.lightnet.mmoblockrespawn.utils;
+package ca.lightnet.FaevaleEngine.libs;
 
-public class utility {
+public class BoolUtils {
     public static Boolean toggleBool(Boolean b){
         if (b == null) { return false; }
         return !b;

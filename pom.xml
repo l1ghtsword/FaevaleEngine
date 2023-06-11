@@ -6,8 +6,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ca.lightnet</groupId>
-	<artifactId>mmoblockrespawn</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<artifactId>FaevaleEngine</artifactId>
+	<version>1.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

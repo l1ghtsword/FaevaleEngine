@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="mmoBlockRespawn">
-    <output-path>$PROJECT_DIR$/target/artifacts/mmoBlockRespawn</output-path>
-    <root id="archive" name="mmoBlockRespawn.jar">
-      <element id="module-output" name="mmoblockrespawn" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/plugin.yml" />
-    </root>
-  </artifact>
-</component>

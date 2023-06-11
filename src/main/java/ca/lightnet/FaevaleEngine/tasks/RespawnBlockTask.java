@@ -1,6 +1,5 @@
-package ca.lightnet.mmoblockrespawn.tasks;
+package ca.lightnet.FaevaleEngine.tasks;
 
-import ca.lightnet.mmoblockrespawn.MmoBlockRespawn;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
