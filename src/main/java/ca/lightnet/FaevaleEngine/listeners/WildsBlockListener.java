@@ -1,15 +1,21 @@
 package ca.lightnet.FaevaleEngine.listeners;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
+import ca.lightnet.FaevaleEngine.tasks.DeserializeTaskFromDB;
 import ca.lightnet.FaevaleEngine.tasks.RespawnBlockTask;
+import ca.lightnet.FaevaleEngine.tasks.SerializeTaskToDB;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 
 import java.util.List;
+import java.util.UUID;
 
 public class WildsBlockListener implements Listener{
     private final FaevaleEngine plugin;
@@ -48,13 +54,45 @@ public class WildsBlockListener implements Listener{
         long timer = config.getLong("defaultTimer",100L);
         Material placeholder = Material.getMaterial(config.getString("defaultPlaceholder","BEDROCK"));
 
+
         //block all break events if regen list is unset (Panic mode)
         if (regenBlocklist == null) {
-            FaevaleEngine.LOGGER.warning("Regen list is null, preventing block events!");
+            FaevaleEngine.logWarn("Regen list is null, preventing block events!");
             e.setCancelMessage("Regen list is null, preventing break events!");
             e.setCancelled(true);
             return;
         }
+
+        //Prevent breaking supporting block under plant, etc
+        if (e.getMaterial().isSolid()) {
+            Location checkUP = e.getLocation().clone().add(0,1,0);
+            Location checkN = e.getLocation().clone().subtract(0,0,1);
+            Location checkE = e.getLocation().clone().add(1,0,0);
+            Location checkS = e.getLocation().clone().add(0,0,1);
+            Location checkW = e.getLocation().clone().subtract(1,0,0);
+
+            if(e.getMaterial() != Material.BAMBOO) {
+                if(     e.getMaterial() == Material.STRIPPED_JUNGLE_WOOD ||
+                        e.getMaterial() == Material.JUNGLE_WOOD ||
+                        e.getMaterial() == Material.STRIPPED_JUNGLE_LOG ||
+                        e.getMaterial() == Material.JUNGLE_LOG) {
+                    if (    checkN.getBlock().getType() == Material.COCOA ||
+                            checkE.getBlock().getType() == Material.COCOA ||
+                            checkS.getBlock().getType() == Material.COCOA ||
+                            checkW.getBlock().getType() == Material.COCOA){
+                        e.setCancelled(true);
+                        e.setCancelMessage("&4Cannot break supporting block!");
+                        return;
+                    }
+                } else if (!checkUP.getBlock().getType().isSolid() ||
+                           checkUP.getBlock().getType() == Material.BAMBOO) {
+                    e.setCancelled(true);
+                    e.setCancelMessage("&4Cannot break supporting block!");
+                    return;
+                }
+            }
+        }
+
 
         // Look for match and validate config results into variables
         for (String obj : regenBlocklist) {
@@ -76,18 +114,48 @@ public class WildsBlockListener implements Listener{
                 }
             }
         }
-        //If Material is not on the regen list, quit
-        if(!regenerate) { return; }
+        //If Material is not on the regen list, prevent block break
+        if(!regenerate) {
+            e.setCancelled(true);
+            e.setCancelMessage("&4"+e.getMaterial().name()+" cannot be broken in the wild.");
+            return;
+        }
 
-        //TODO add blacklist
+        //Database serialization
+        String taskID = UUID.randomUUID().toString();
+        new SerializeTaskToDB(taskID,e.getLocation(),e.getBlock().getBlockData()).runTask(plugin);
+        new DeserializeTaskFromDB(taskID).runTaskLater(plugin, timer);
+
+        if (e.getBlock().getBlockData() instanceof Bisected) {
+            Bisected block = (Bisected) e.getBlock().getBlockData();
+            Location halfLoc = e.getLocation().clone();
+            switch (block.getHalf()) {
+                case BOTTOM:
+                    halfLoc.add(0,1,0);
+                    break;
+                case TOP:
+                    halfLoc.subtract(0,1,0);
+                    break;
+            }
 
 
-        //TODO Refactor to use Block instead for task serialization
-        new RespawnBlockTask(placeholder,e.getLocation()).runTask(plugin);
-        new RespawnBlockTask(e.getMaterial(),e.getLocation()).runTaskLater(plugin,timer);
+            //Set both half's back after delay
+            new RespawnBlockTask(e.getLocation(),e.getBlock().getBlockData()).runTaskLater(plugin, timer);
+            new RespawnBlockTask(halfLoc,halfLoc.getBlock().getBlockData()).runTaskLater(plugin, timer);
+
+
+            //Set placeholder block for both half's
+            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(plugin);
+            new RespawnBlockTask(halfLoc,Bukkit.createBlockData(placeholder)).runTask(plugin);
+        } else {
+            //Set the 1 block broken in the event (default)
+            new RespawnBlockTask(e.getLocation(),e.getBlock().getBlockData()).runTaskLater(plugin, timer);
+            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(plugin);
+        }
+
 
         if (config.getBoolean("debug")) {
-            FaevaleEngine.LOGGER.info(
+            FaevaleEngine.logInfo(
                     e.getPlayer().getName()+" just broke "+e.getMaterial()+
                             " - Wilderness: "+e.isInWilderness()+
                             " - Op: "+e.getPlayer().isOp()+

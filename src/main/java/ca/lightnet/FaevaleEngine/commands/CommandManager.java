@@ -1,7 +1,7 @@
 package ca.lightnet.FaevaleEngine.commands;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
-import ca.lightnet.FaevaleEngine.libs.BoolUtils;
+import ca.lightnet.FaevaleEngine.libs.Utils.BoolUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +17,7 @@ public class CommandManager implements CommandExecutor{
                 toggleDebug(sender);
                 break;
             case ("test"):
-                FaevaleEngine.LOGGER.info("testing...");
+                FaevaleEngine.logInfo("testing...");
                 break;
             default:
                 return false;
@@ -33,7 +33,7 @@ public class CommandManager implements CommandExecutor{
         status = BoolUtils.toggleBool(config.getBoolean("debug",false));
         config.set("debug",status);
         message = "Debugging set to " + status;
-        FaevaleEngine.LOGGER.info(message);
+        FaevaleEngine.logInfo(message);
         sender.sendMessage(message);
     }
 }

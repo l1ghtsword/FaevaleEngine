@@ -1,18 +1,18 @@
 package ca.lightnet.FaevaleEngine.tasks;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class RespawnBlockTask extends BukkitRunnable {
-    Material material;
-    Location location;
-    public RespawnBlockTask(Material material, Location location) {
-        this.material = material;
-        this.location = location;
+    private final Location loc;
+    private final BlockData bd;
+
+    public RespawnBlockTask(Location location, BlockData blockdata) {
+        this.loc = location;
+        this.bd = blockdata;
     }
+
     @Override
-    public void run() {
-        location.getBlock().setType(material);
-    }
+    public void run() { loc.getBlock().setBlockData(bd); }
 }

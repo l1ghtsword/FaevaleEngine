@@ -1,7 +1,8 @@
 package ca.lightnet.FaevaleEngine;
 
 import ca.lightnet.FaevaleEngine.commands.CommandManager;
-import ca.lightnet.FaevaleEngine.listeners.WildsBlockListener;
+import ca.lightnet.FaevaleEngine.components.blockRegen;
+import ca.lightnet.FaevaleEngine.libs.Models.Objects.ComponentRegistry;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
 import java.util.Objects;
@@ -11,30 +12,37 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FaevaleEngine extends JavaPlugin
 {
+  private static ComponentRegistry registry;
   private static FaevaleEngine instance;
   private static FileConfiguration config;
   private static Essentials essentials;
-  public static Logger LOGGER;
+  private static Logger logger;
 
   public void onEnable() {
-    //Startup logic
-    LOGGER = Logger.getLogger("mmoblockrespawn");
-    LOGGER.info("mmoblockrespawn enabled");
+
+    registry = new ComponentRegistry();
+    logger = Logger.getLogger("FaevaleEngine");
     instance = this;
     config = this.getConfig();
-    config.options().copyDefaults(true);
-    saveConfig();
     essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
 
-    //Events
-    Bukkit.getServer().getPluginManager().registerEvents(new WildsBlockListener(), this);
+    logInfo("FaevaleEngine starting");
+    config.options().copyDefaults(true);
+    saveConfig();
 
-    //Commands
+    //Component registry (Add config checks)
+    registry.registerComponent(new blockRegen());
+
+    //Commands (To be abstracted)
     Objects.requireNonNull(this.getCommand("regen")).setExecutor(new CommandManager());
+
+    registry.load();
   }
 
   public void onDisable() {
-    LOGGER.info("FaevaleEngine disabled");
+    registry.saveAll();
+    registry.unload();
+    logInfo("FaevaleEngine shut down!");
   }
 
   public static FaevaleEngine getInstance() {
@@ -42,4 +50,13 @@ public final class FaevaleEngine extends JavaPlugin
   }
   public static FileConfiguration getConfigFile() { return config; }
   public static Essentials getEssentials() { return essentials; }
+
+  //Logging Methods
+  public static void logInfo (String msg) { logger.info("[FaevaleEngine] "+msg); }
+  public static void logInfo (String msg, String origin) { logger.info("["+origin+"] "+msg); }
+  public static void logWarn (String msg) { logger.warning("[FaevaleEngine] "+msg); }
+  public static void logWarn (String msg, String origin) { logger.warning("["+origin+"] "+msg);}
+  public static void logSevere (String msg) { logger.severe("[FaevaleEngine] "+msg); }
+  public static void logSevere (String msg, String origin) { logger.severe("["+origin+"] "+msg);}
+
 }
