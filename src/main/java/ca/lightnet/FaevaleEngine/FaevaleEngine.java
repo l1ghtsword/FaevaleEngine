@@ -1,11 +1,10 @@
 package ca.lightnet.FaevaleEngine;
 
-import ca.lightnet.FaevaleEngine.commands.CommandManager;
+import ca.lightnet.FaevaleEngine.libs.Models.Objects.CommandRegistry;
 import ca.lightnet.FaevaleEngine.components.blockRegen;
 import ca.lightnet.FaevaleEngine.libs.Models.Objects.ComponentRegistry;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
-import java.util.Objects;
 import java.util.logging.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,33 +15,39 @@ public final class FaevaleEngine extends JavaPlugin
   private static FaevaleEngine instance;
   private static FileConfiguration config;
   private static Essentials essentials;
+  private static CommandRegistry commandRegistry;
   private static Logger logger;
 
   public void onEnable() {
-
-    registry = new ComponentRegistry();
+    //Initialization
     logger = Logger.getLogger("FaevaleEngine");
     instance = this;
     config = this.getConfig();
     essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
+    logInfo("starting up!");
 
-    logInfo("FaevaleEngine starting");
+    //Load and set global config
     config.options().copyDefaults(true);
     saveConfig();
 
-    //Component registry (Add config checks)
+    //load command registration service
+    getCommand("faevale").setExecutor(new CommandRegistry());
+    commandRegistry = (CommandRegistry) getCommand("faevale").getExecutor();
+    registry = new ComponentRegistry();
+
+    //Load Component registration service
     registry.registerComponent(new blockRegen());
 
-    //Commands (To be abstracted)
-    Objects.requireNonNull(this.getCommand("regen")).setExecutor(new CommandManager());
-
+    //Finish loading plugin
     registry.load();
+    logInfo("loaded and ready to go!");
   }
 
   public void onDisable() {
+    logInfo("Shutting down!");
     registry.saveAll();
     registry.unload();
-    logInfo("FaevaleEngine shut down!");
+    logInfo("Plugin disabled");
   }
 
   public static FaevaleEngine getInstance() {
@@ -50,6 +55,7 @@ public final class FaevaleEngine extends JavaPlugin
   }
   public static FileConfiguration getConfigFile() { return config; }
   public static Essentials getEssentials() { return essentials; }
+  public static CommandRegistry getCommandRegistry() { return commandRegistry;}
 
   //Logging Methods
   public static void logInfo (String msg) { logger.info("[FaevaleEngine] "+msg); }

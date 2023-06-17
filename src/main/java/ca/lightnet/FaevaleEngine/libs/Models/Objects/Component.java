@@ -9,16 +9,18 @@ public abstract class Component {
 
     private final FaevaleEngine plugin;
     private final PluginManager pluginManager;
+    private final CommandRegistry commandRegistry;
 
     public Component() {
         this.plugin = FaevaleEngine.getInstance();
         this.pluginManager = Bukkit.getServer().getPluginManager();
+        this.commandRegistry = FaevaleEngine.getCommandRegistry();
     }
 
     public final void registerListener(Listener eventListener) {
         pluginManager.registerEvents(eventListener, plugin);
     }
-    public final void registerCommand() {} //Unimplemented
+    public final void registerCommand(Command command) { commandRegistry.addCommand(command); }
     public final void registerConfig() {} //Unimplemented
 
     public abstract void onLoad();

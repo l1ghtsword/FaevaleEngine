@@ -1,4 +1,4 @@
-package ca.lightnet.FaevaleEngine.commands;
+package ca.lightnet.FaevaleEngine.libs.Models.Objects;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
 import ca.lightnet.FaevaleEngine.libs.Utils.BoolUtils;
@@ -7,7 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public class CommandManager implements CommandExecutor{
+public class OLD_CommandManager implements CommandExecutor{
     FileConfiguration config = FaevaleEngine.getConfigFile();
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){

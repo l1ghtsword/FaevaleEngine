@@ -100,7 +100,7 @@ above, provided that you also meet all of these conditions:
     part thereof, to be licensed as a whole at no charge to all third
     parties under the terms of this License.
 
-    c) If the modified program normally reads commands interactively
+    c) If the modified program normally reads subCommands interactively
     when run, you must cause it, when started running for such
     interactive use in the most ordinary way, to print or display an
     announcement including an appropriate copyright notice and a
@@ -317,8 +317,8 @@ when it starts in an interactive mode:
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
 
-The hypothetical commands `show w' and `show c' should show the appropriate
-parts of the General Public License.  Of course, the commands you use may
+The hypothetical subCommands `show w' and `show c' should show the appropriate
+parts of the General Public License.  Of course, the subCommands you use may
 be called something other than `show w' and `show c'; they could even be
 mouse-clicks or menu items--whatever suits your program.
 
