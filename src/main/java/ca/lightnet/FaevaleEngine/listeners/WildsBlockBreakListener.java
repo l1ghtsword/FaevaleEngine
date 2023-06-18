@@ -1,6 +1,8 @@
 package ca.lightnet.FaevaleEngine.listeners;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
+import ca.lightnet.FaevaleEngine.libraries.models.objects.Component;
+import ca.lightnet.FaevaleEngine.libraries.models.objects.Listener;
 import ca.lightnet.FaevaleEngine.tasks.DeserializeTaskFromDB;
 import ca.lightnet.FaevaleEngine.tasks.RespawnBlockTask;
 import ca.lightnet.FaevaleEngine.tasks.SerializeTaskToDB;
@@ -11,20 +13,17 @@ import org.bukkit.Material;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 
 import java.util.List;
 import java.util.UUID;
 
-public class WildsBlockListener implements Listener{
-    private final FaevaleEngine plugin;
-    private final FileConfiguration config;
+public class WildsBlockBreakListener extends Listener {
 
+    private final FileConfiguration config = FaevaleEngine.getConfigFile();
 
-    public WildsBlockListener() {
-        this.plugin = FaevaleEngine.getInstance();
-        this.config = FaevaleEngine.getConfigFile();
+    public WildsBlockBreakListener(Component component) {
+        super(component);
     }
 
     @EventHandler
@@ -57,7 +56,7 @@ public class WildsBlockListener implements Listener{
 
         //block all break events if regen list is unset (Panic mode)
         if (regenBlocklist == null) {
-            FaevaleEngine.logWarn("Regen list is null, preventing block events!");
+            FaevaleEngine.logWarn("Regen list is null, preventing block events!",getComponentName());
             e.setCancelMessage("Regen list is null, preventing break events!");
             e.setCancelled(true);
             return;
@@ -123,8 +122,8 @@ public class WildsBlockListener implements Listener{
 
         //Database serialization
         String taskID = UUID.randomUUID().toString();
-        new SerializeTaskToDB(taskID,e.getLocation(),e.getBlock().getBlockData()).runTask(plugin);
-        new DeserializeTaskFromDB(taskID).runTaskLater(plugin, timer);
+        new SerializeTaskToDB(taskID,e.getLocation(),e.getBlock().getBlockData()).runTask(getPlugin());
+        new DeserializeTaskFromDB(taskID).runTaskLater(getPlugin(), timer);
 
         if (e.getBlock().getBlockData() instanceof Bisected) {
             Bisected block = (Bisected) e.getBlock().getBlockData();
@@ -140,17 +139,17 @@ public class WildsBlockListener implements Listener{
 
 
             //Set both half's back after delay
-            new RespawnBlockTask(e.getLocation(),e.getBlock().getBlockData()).runTaskLater(plugin, timer);
-            new RespawnBlockTask(halfLoc,halfLoc.getBlock().getBlockData()).runTaskLater(plugin, timer);
+            new RespawnBlockTask(e.getLocation(),e.getBlock().getBlockData()).runTaskLater(getPlugin(), timer);
+            new RespawnBlockTask(halfLoc,halfLoc.getBlock().getBlockData()).runTaskLater(getPlugin(), timer);
 
 
             //Set placeholder block for both half's
-            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(plugin);
-            new RespawnBlockTask(halfLoc,Bukkit.createBlockData(placeholder)).runTask(plugin);
+            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(getPlugin());
+            new RespawnBlockTask(halfLoc,Bukkit.createBlockData(placeholder)).runTask(getPlugin());
         } else {
             //Set the 1 block broken in the event (default)
-            new RespawnBlockTask(e.getLocation(),e.getBlock().getBlockData()).runTaskLater(plugin, timer);
-            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(plugin);
+            new RespawnBlockTask(e.getLocation(),e.getBlock().getBlockData()).runTaskLater(getPlugin(), timer);
+            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(getPlugin());
         }
 
 
@@ -159,7 +158,7 @@ public class WildsBlockListener implements Listener{
                     e.getPlayer().getName()+" just broke "+e.getMaterial()+
                             " - Wilderness: "+e.isInWilderness()+
                             " - Op: "+e.getPlayer().isOp()+
-                            " - Gamemode: "+e.getPlayer().getGameMode());
+                            " - Gamemode: "+e.getPlayer().getGameMode(),getComponentName());
         }
     }
 }

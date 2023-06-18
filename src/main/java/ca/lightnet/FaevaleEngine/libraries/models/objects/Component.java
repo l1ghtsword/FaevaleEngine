@@ -8,11 +8,13 @@ import org.bukkit.plugin.PluginManager;
 
 public abstract class Component {
 
+    private final String name;
     private final FaevaleEngine plugin;
     private final PluginManager pluginManager;
     private final CommandRegistry commandRegistry;
 
     public Component() {
+        this.name = this.getClass().getSimpleName();
         this.plugin = FaevaleEngine.getInstance();
         this.pluginManager = Bukkit.getServer().getPluginManager();
         this.commandRegistry = FaevaleEngine.getCommandRegistry();
@@ -23,6 +25,9 @@ public abstract class Component {
     }
     public final void registerCommand(Command command) { commandRegistry.addCommand(command); }
     public final void registerConfig() {} //Unimplemented
+
+    public final String getComponentName() { return this.name; }
+    public final FaevaleEngine getPlugin() {return this.plugin; }
 
     public abstract void onLoad();
     public abstract void onSave();

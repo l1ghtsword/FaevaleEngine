@@ -17,14 +17,16 @@ public final class FaevaleEngine extends JavaPlugin
   private static Essentials essentials;
   private static CommandRegistry commandRegistry;
   private static Logger logger;
+  private static String origin;
 
   public void onEnable() {
     //Initialization
     logger = Logger.getLogger("FaevaleEngine");
+    origin = "Main";
     instance = this;
     config = this.getConfig();
     essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-    logInfo("starting up!");
+    logInfo("starting up!", origin);
 
     //Load and set global config
     config.options().copyDefaults(true);
@@ -33,21 +35,24 @@ public final class FaevaleEngine extends JavaPlugin
     //load command registration service
     getCommand("faevale").setExecutor(new CommandRegistry());
     commandRegistry = (CommandRegistry) getCommand("faevale").getExecutor();
-    registry = new ComponentRegistry();
 
-    //Load Component registration service
+
+
+    registry = new ComponentRegistry();
+    //////// Load Components ////////
     registry.registerComponent(new blockRegen());
 
-    //Finish loading plugin
+
+    /////////////////////////////////
     registry.load();
-    logInfo("loaded and ready to go!");
+    logInfo("loaded and ready to go!", origin);
   }
 
   public void onDisable() {
-    logInfo("Shutting down!");
+    logInfo("Shutting down!", origin);
     registry.saveAll();
     registry.unload();
-    logInfo("Plugin disabled");
+    logInfo("Plugin disabled", origin);
   }
 
   public static FaevaleEngine getInstance() {
@@ -58,11 +63,8 @@ public final class FaevaleEngine extends JavaPlugin
   public static CommandRegistry getCommandRegistry() { return commandRegistry;}
 
   //Logging Methods
-  public static void logInfo (String msg) { logger.info("[FaevaleEngine] "+msg); }
-  public static void logInfo (String msg, String origin) { logger.info("["+origin+"] "+msg); }
-  public static void logWarn (String msg) { logger.warning("[FaevaleEngine] "+msg); }
-  public static void logWarn (String msg, String origin) { logger.warning("["+origin+"] "+msg);}
-  public static void logSevere (String msg) { logger.severe("[FaevaleEngine] "+msg); }
-  public static void logSevere (String msg, String origin) { logger.severe("["+origin+"] "+msg);}
+  public static void logInfo (String msg, String origin) { logger.info(origin+": "+msg); }
+  public static void logWarn (String msg, String origin) { logger.warning(origin+": "+msg);}
+  public static void logSevere (String msg, String origin) { logger.severe(origin+": "+msg);}
 
 }

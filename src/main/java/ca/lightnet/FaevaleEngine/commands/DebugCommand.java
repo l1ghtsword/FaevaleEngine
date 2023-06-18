@@ -2,6 +2,7 @@ package ca.lightnet.FaevaleEngine.commands;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
 import ca.lightnet.FaevaleEngine.libraries.models.objects.Command;
+import ca.lightnet.FaevaleEngine.libraries.models.objects.Component;
 import ca.lightnet.FaevaleEngine.libraries.utilities.BoolUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -9,6 +10,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class DebugCommand extends Command {
 
     FileConfiguration config = FaevaleEngine.getConfigFile();
+
+    public DebugCommand(Component component) { super(component); }
 
     @Override
     public String getName() {
@@ -34,7 +37,7 @@ public class DebugCommand extends Command {
     public boolean onCommand(CommandSender sender, String[] args) {
         Boolean status = BoolUtils.toggleBool(config.getBoolean("debug",false));
         config.set("debug",status);
-        FaevaleEngine.logInfo("Debugging set to " + status);
+        FaevaleEngine.logInfo("Debugging set to " + status,getComponentName());
         sender.sendMessage("Debugging set to " + status);
         return true;
     }
