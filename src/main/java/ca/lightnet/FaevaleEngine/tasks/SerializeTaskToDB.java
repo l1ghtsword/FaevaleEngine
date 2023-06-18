@@ -18,6 +18,6 @@ public class SerializeTaskToDB extends BukkitRunnable {
 
     @Override
     public void run() {
-        FaevaleEngine.logInfo("ID{"+id+"}\n"+"DATA {"+bd.getAsString()+"}\nLOCATION{"+loc.toString()+"}");
+        FaevaleEngine.logInfo("ID{"+id+"}\n"+"DATA {"+bd.getAsString()+"}\nLOCATION{"+loc.toString()+"}","SerialTask");
     }
 }
