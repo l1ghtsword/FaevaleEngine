@@ -1,6 +1,7 @@
-package ca.lightnet.FaevaleEngine.libs.Models.Objects;
+package ca.lightnet.FaevaleEngine.libraries.models.objects;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
+import ca.lightnet.FaevaleEngine.libraries.services.CommandRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;

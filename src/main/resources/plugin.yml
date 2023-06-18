@@ -8,6 +8,6 @@ depend:
 softdepend:
   - Essentials
 commands:
-  regen:
-    description: Wilds regeneration plugin
-    usage: /<command> [debug|test|help]
+  faevale:
+    description: Faevale Server Core Plugin
+    usage: /<command> help

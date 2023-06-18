@@ -1,8 +1,8 @@
 package ca.lightnet.FaevaleEngine;
 
-import ca.lightnet.FaevaleEngine.libs.Models.Objects.CommandRegistry;
+import ca.lightnet.FaevaleEngine.libraries.services.CommandRegistry;
 import ca.lightnet.FaevaleEngine.components.blockRegen;
-import ca.lightnet.FaevaleEngine.libs.Models.Objects.ComponentRegistry;
+import ca.lightnet.FaevaleEngine.libraries.services.ComponentRegistry;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
 import java.util.logging.Logger;

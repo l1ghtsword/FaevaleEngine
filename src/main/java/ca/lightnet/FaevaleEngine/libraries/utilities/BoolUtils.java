@@ -1,4 +1,4 @@
-package ca.lightnet.FaevaleEngine.libs.Utils;
+package ca.lightnet.FaevaleEngine.libraries.utilities;
 
 public class BoolUtils {
     public static Boolean toggleBool(Boolean b){

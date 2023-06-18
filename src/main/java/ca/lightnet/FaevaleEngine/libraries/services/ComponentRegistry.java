@@ -1,6 +1,6 @@
-package ca.lightnet.FaevaleEngine.libs.Models.Objects;
+package ca.lightnet.FaevaleEngine.libraries.services;
 
-import ca.lightnet.FaevaleEngine.libs.Models.Objects.Component;
+import ca.lightnet.FaevaleEngine.libraries.models.objects.Component;
 
 import java.util.ArrayList;
 import java.util.List;

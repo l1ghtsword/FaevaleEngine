@@ -1,4 +1,4 @@
-package ca.lightnet.FaevaleEngine.libs.Models.Objects;
+package ca.lightnet.FaevaleEngine.libraries.models.objects;
 
 import org.bukkit.command.CommandSender;
 
@@ -9,7 +9,8 @@ public abstract class Command {
     public abstract String getDescription();
 
     public abstract  String getUsage();
+    public abstract  String getPermission();
 
-    public abstract void perform(CommandSender sender, String args[]);
+    public abstract boolean onCommand(CommandSender sender, String args[]);
 
 }
