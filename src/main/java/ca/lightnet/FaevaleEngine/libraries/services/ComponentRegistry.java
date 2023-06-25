@@ -25,6 +25,8 @@ public class ComponentRegistry {
         componentList.forEach(Component::onSave);
     }
 
+    public void reloadAll() { componentList.forEach(Component::onReload); }
+
     public void unload() {
         componentList.forEach(Component::onUnload);
     }

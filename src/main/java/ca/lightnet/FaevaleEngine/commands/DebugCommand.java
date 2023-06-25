@@ -11,7 +11,9 @@ public class DebugCommand extends Command {
 
     FileConfiguration config = FaevaleEngine.getConfigFile();
 
-    public DebugCommand(Component component) { super(component); }
+    public DebugCommand(String component) {
+        super(component);
+    }
 
     @Override
     public String getName() {

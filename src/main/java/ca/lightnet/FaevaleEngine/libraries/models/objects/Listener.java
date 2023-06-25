@@ -1,15 +1,16 @@
 package ca.lightnet.FaevaleEngine.libraries.models.objects;
 
+
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
 
 public abstract class Listener implements org.bukkit.event.Listener {
 
-    private final Component component;
+    private final String componentName;
 
-    public Listener(Component component) {
-        this.component = component;
+    public Listener(String componentName) {
+        this.componentName = componentName;
     }
 
-    public String getComponentName() { return this.component.getComponentName(); }
-    public FaevaleEngine getPlugin() { return this.component.getPlugin(); }
+    public String getComponentName() { return this.componentName; }
+    public FaevaleEngine getPlugin() { return FaevaleEngine.getInstance(); }
 }

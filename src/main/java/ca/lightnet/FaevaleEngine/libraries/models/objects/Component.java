@@ -2,33 +2,36 @@ package ca.lightnet.FaevaleEngine.libraries.models.objects;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
 import ca.lightnet.FaevaleEngine.libraries.services.CommandRegistry;
+import ca.lightnet.FaevaleEngine.libraries.services.ConfigRegistry;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.PluginManager;
 
 public abstract class Component {
 
     private final String name;
-    private final FaevaleEngine plugin;
-    private final PluginManager pluginManager;
     private final CommandRegistry commandRegistry;
+    private final ConfigRegistry configRegistry;
 
     public Component() {
         this.name = this.getClass().getSimpleName();
-        this.plugin = FaevaleEngine.getInstance();
-        this.pluginManager = Bukkit.getServer().getPluginManager();
         this.commandRegistry = FaevaleEngine.getCommandRegistry();
+        this.configRegistry = FaevaleEngine.getConfigRegistry();
     }
 
-    public final void registerListener(Listener eventListener) {
-        pluginManager.registerEvents(eventListener, plugin);
-    }
+    public final void registerListener(Listener eventListener) { Bukkit.getServer().getPluginManager().registerEvents(eventListener, FaevaleEngine.getInstance()); }
     public final void registerCommand(Command command) { commandRegistry.addCommand(command); }
-    public final void registerConfig() {} //Unimplemented
+    public final void registerConfig() { configRegistry.addConfig(this.getComponentName()); }
 
     public final String getComponentName() { return this.name; }
-    public final FaevaleEngine getPlugin() {return this.plugin; }
+    public final FileConfiguration getConfig() {return this.configRegistry.getConfig(this.getComponentName()); }
+    public final void saveConfig() { this.configRegistry.saveConfig(this.getComponentName()); }
+    public final void reloadConfig() { this.configRegistry.reloadConfig(this.getComponentName()); }
 
+    public final void onReload() {
+        this.onUnload();
+        this.onLoad();
+    }
     public abstract void onLoad();
     public abstract void onSave();
     public abstract void onUnload();

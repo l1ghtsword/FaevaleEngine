@@ -1,7 +1,6 @@
 package ca.lightnet.FaevaleEngine.listeners;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
-import ca.lightnet.FaevaleEngine.libraries.models.objects.Component;
 import ca.lightnet.FaevaleEngine.libraries.models.objects.Listener;
 import ca.lightnet.FaevaleEngine.tasks.DeserializeTaskFromDB;
 import ca.lightnet.FaevaleEngine.tasks.RespawnBlockTask;
@@ -22,7 +21,7 @@ public class WildsBlockBreakListener extends Listener {
 
     private final FileConfiguration config = FaevaleEngine.getConfigFile();
 
-    public WildsBlockBreakListener(Component component) {
+    public WildsBlockBreakListener(String component) {
         super(component);
     }
 

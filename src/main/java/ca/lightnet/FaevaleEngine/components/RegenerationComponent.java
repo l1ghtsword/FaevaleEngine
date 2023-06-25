@@ -4,21 +4,22 @@ import ca.lightnet.FaevaleEngine.commands.DebugCommand;
 import ca.lightnet.FaevaleEngine.libraries.models.objects.Component;
 import ca.lightnet.FaevaleEngine.listeners.WildsBlockBreakListener;
 
-public class blockRegen extends Component {
+public class RegenerationComponent extends Component {
 
     @Override
     public void onLoad(){
-        registerListener(new WildsBlockBreakListener(this));
-        registerCommand(new DebugCommand(this));
+        registerListener(new WildsBlockBreakListener(this.getComponentName()));
+        registerCommand(new DebugCommand(this.getComponentName()));
+        registerConfig();
     }
 
     @Override
     public void onSave(){
-        //unimplemented
+        this.saveConfig();
     }
 
     @Override
     public void onUnload(){
-        //unimplemented
+        this.saveConfig();
     }
 }
