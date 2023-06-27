@@ -5,14 +5,14 @@ import java.util.Map;
 
 public class DefaultConfig {
 
-    public static Map<String,Object> GetDefaults(String componentName) {
-        Map<String,Object> defaults = new HashMap<String,Object>();
+    public static Map<String,Object> getDefaults(String componentName) {
+        Map<String,Object> defaults = new HashMap<>();
         switch (componentName) {
-            case ("RegenerationComponent") :
+            case ("BlockBreakComponent") :
                 defaults.put("allowAFK",false);
                 defaults.put("defaultTimer",100);
                 defaults.put("defaultPlaceholder","BEDROCK");
-                defaults.put("data", new String[] {
+                defaults.put("properties", new String[] {
                         "ALLIUM,100,AIR",
                         "ATTACHED_MELON_STEM,300,AIR",
                         "ATTACHED_PUMPKIN_STEM,460,AIR",

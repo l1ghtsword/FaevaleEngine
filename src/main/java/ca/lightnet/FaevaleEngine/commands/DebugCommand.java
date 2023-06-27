@@ -2,7 +2,6 @@ package ca.lightnet.FaevaleEngine.commands;
 
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
 import ca.lightnet.FaevaleEngine.libraries.models.objects.Command;
-import ca.lightnet.FaevaleEngine.libraries.models.objects.Component;
 import ca.lightnet.FaevaleEngine.libraries.utilities.BoolUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,8 +10,8 @@ public class DebugCommand extends Command {
 
     FileConfiguration config = FaevaleEngine.getConfigFile();
 
-    public DebugCommand(String component) {
-        super(component);
+    public DebugCommand(String componentName) {
+        super(componentName);
     }
 
     @Override

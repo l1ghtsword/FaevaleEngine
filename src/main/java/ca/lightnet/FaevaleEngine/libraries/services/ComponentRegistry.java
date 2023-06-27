@@ -2,32 +2,29 @@ package ca.lightnet.FaevaleEngine.libraries.services;
 
 import ca.lightnet.FaevaleEngine.libraries.models.objects.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ComponentRegistry {
 
-    private final List<Component> componentList;
+    private final Map<String,Component> componentMap;
 
-    public ComponentRegistry() {
-        componentList = new ArrayList<>();
-    }
+    public ComponentRegistry() { componentMap = new HashMap<>(); }
 
-    public void registerComponent(Component component) {
-        componentList.add(component);
-    }
+    public void registerComponent(Component component) { componentMap.put(component.getComponentName(),component); }
 
-    public void load() {
-        componentList.forEach(Component::onLoad);
-    }
+    public @Nullable Component getComponent(String componentName) { return componentMap.get(componentMap.get(componentName)); }
+
+    public void load() { componentMap.forEach((k, v) -> v.onLoad()); }
 
     public void saveAll() {
-        componentList.forEach(Component::onSave);
+        componentMap.forEach((k, v) -> v.onSave());
     }
 
-    public void reloadAll() { componentList.forEach(Component::onReload); }
+    public void reloadAll() { componentMap.forEach((k, v) -> v.onReload()); }
 
     public void unload() {
-        componentList.forEach(Component::onUnload);
+        componentMap.forEach((k, v) -> v.onUnload());
     }
 }

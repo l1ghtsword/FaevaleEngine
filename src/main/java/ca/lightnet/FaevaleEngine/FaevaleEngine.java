@@ -1,9 +1,11 @@
 package ca.lightnet.FaevaleEngine;
 
-import ca.lightnet.FaevaleEngine.components.RegenerationComponent;
+import ca.lightnet.FaevaleEngine.commands.DebugCommand;
+import ca.lightnet.FaevaleEngine.components.BlockBreakComponent;
 import ca.lightnet.FaevaleEngine.libraries.services.CommandRegistry;
 import ca.lightnet.FaevaleEngine.libraries.services.ComponentRegistry;
 import ca.lightnet.FaevaleEngine.libraries.services.ConfigRegistry;
+import ca.lightnet.FaevaleEngine.listeners.CancelledEventListener;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
 import java.util.logging.Logger;
@@ -37,14 +39,24 @@ public final class FaevaleEngine extends JavaPlugin
     //Load configRegistry
     configRegistry = new ConfigRegistry();
 
+    //Global Listeners
+    Bukkit.getServer().getPluginManager().registerEvents(new CancelledEventListener("Global"),this);
 
     //load command registration service
-    getCommand("faevale").setExecutor(new CommandRegistry());
-    commandRegistry = (CommandRegistry) getCommand("faevale").getExecutor();
+    try {
+      getCommand("faevale").setExecutor(new CommandRegistry());
+      commandRegistry = (CommandRegistry) getCommand("faevale").getExecutor();
+    } catch(NullPointerException e) {
+      logSevere("Something has gone horribly wrong with the command registry","Global");
+      e.getStackTrace();
+      this.onDisable();
+      return;
+    }
+    commandRegistry.addCommand(new DebugCommand("Global"));
 
     //////// Load Components ////////
     componentRegistry = new ComponentRegistry();
-    componentRegistry.registerComponent(new RegenerationComponent());
+    componentRegistry.registerComponent(new BlockBreakComponent());
 
     /////////////////////////////////
     componentRegistry.load();

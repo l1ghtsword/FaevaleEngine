@@ -15,7 +15,7 @@ public class ConfigRegistry {
     private final Map<String,FileConfiguration> configList;
     private final FaevaleEngine plugin = FaevaleEngine.getInstance();
 
-    public ConfigRegistry() { configList = new HashMap<String, FileConfiguration>(); }
+    public ConfigRegistry() { configList = new HashMap<>(); }
 
     public void addConfig(String componentName) {
         File configFile;
@@ -31,7 +31,7 @@ public class ConfigRegistry {
             }
         }
         config = YamlConfiguration.loadConfiguration(configFile);
-        config.addDefaults(DefaultConfig.GetDefaults(componentName));
+        config.addDefaults(DefaultConfig.getDefaults(componentName));
         config.options().copyDefaults(true);
         try { config.save(configFile); }
         catch(IOException e) {
@@ -50,7 +50,7 @@ public class ConfigRegistry {
         try {
             configList.get(componentName).save(new File(plugin.getDataFolder(),componentName+".yml"));
         }catch(IOException e){
-            FaevaleEngine.logSevere("&4Unable to save RegenerationComponent.yml. Check server storage permissions!",componentName+"Config");
+            FaevaleEngine.logSevere("&4Unable to save BlockBreakComponent.yml. Check server storage permissions!",componentName+"Config");
         }
     }
 }

@@ -7,8 +7,8 @@ public abstract class Command {
 
     private final String componentName;
 
-    public Command(String component) {
-        this.componentName = component;
+    public Command(String componentName) {
+        this.componentName = componentName;
     }
     public abstract String getName();
     public abstract String getDescription();
