@@ -1,0 +1,16 @@
+# Verbose debugging messages (spams console)
+debug: true
+
+# False when used in live server
+devMode: false
+
+#MYSQL Database settings
+hostname: 192.168.69.69
+port: 3306
+dbname: minecraft
+table_prefix: faevale_
+username: username
+password: password
+
+#Default database flags
+flags: ?verifyServerCertificate=false&useSSL=false&useUnicode=true&characterEncoding=utf-8
