@@ -14,45 +14,47 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FaevaleEngine extends JavaPlugin
 {
-  private static ComponentRegistry componentRegistry;
-  private static CommandRegistry commandRegistry;
-  private static ConfigRegistry configRegistry;
   private static FaevaleEngine instance;
-  private static FileConfiguration globalConfig;
-  private static Essentials essentials;
-  private static Logger logger;
-  private static String origin;
+  private ComponentRegistry componentRegistry;
+  private CommandRegistry commandRegistry;
+  private ConfigRegistry configRegistry;
+  private FileConfiguration globalConfig;
+  private Essentials essentials;
+  private Logger logger;
+  private String origin;
 
   public void onEnable() {
     //Initialization
-    logger = Logger.getLogger("FaevaleEngine");
-    origin = "Main";
     instance = this;
-    globalConfig = this.getConfig();
+    origin = "Global";
+    logger = Logger.getLogger("FaevaleEngine");
     essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
+    if(essentials == null) { essentials = new Essentials(); } //Prevent crashing, loads defaults
     logInfo("starting up!", origin);
 
     //Load and set global config
+    globalConfig = this.getConfig();
     globalConfig.options().copyDefaults(true);
     saveConfig();
 
     //Load configRegistry
     configRegistry = new ConfigRegistry();
 
-    //Global Listeners
-    Bukkit.getServer().getPluginManager().registerEvents(new CancelledEventListener("Global"),this);
-
-    //load command registration service
     try {
+      //load command registration service
       getCommand("faevale").setExecutor(new CommandRegistry());
       commandRegistry = (CommandRegistry) getCommand("faevale").getExecutor();
     } catch(NullPointerException e) {
-      logSevere("Something has gone horribly wrong with the command registry","Global");
+      logSevere("Something has gone horribly wrong with the command registry",origin);
       e.getStackTrace();
       this.onDisable();
       return;
     }
-    commandRegistry.addCommand(new DebugCommand("Global"));
+
+    //Global Listeners
+    Bukkit.getServer().getPluginManager().registerEvents(new CancelledEventListener(origin),this);
+
+    commandRegistry.addCommand(new DebugCommand(origin));
 
     //////// Load Components ////////
     componentRegistry = new ComponentRegistry();
@@ -66,21 +68,25 @@ public final class FaevaleEngine extends JavaPlugin
 
   public void onDisable() {
     logInfo("Shutting down!", origin);
-    componentRegistry.saveAll();
-    componentRegistry.unload();
-    logInfo("Plugin disabled", origin);
+    if (componentRegistry != null) {
+      componentRegistry.saveAll();
+      componentRegistry.unload();
+    }
+    componentRegistry = null;
+    commandRegistry = null;
+    configRegistry = null;
   }
 
   public static FaevaleEngine getInstance() {
     return instance;
   }
-  public static FileConfiguration getConfigFile() { return globalConfig; }
-  public static Essentials getEssentials() { return essentials; }
-  public static CommandRegistry getCommandRegistry() { return commandRegistry; }
-  public static ConfigRegistry getConfigRegistry() { return configRegistry; }
+  public FileConfiguration getConfigFile() { return this.globalConfig; }
+  public Essentials getEssentials() { return this.essentials; }
+  public CommandRegistry getCommandRegistry() { return this.commandRegistry; }
+  public ConfigRegistry getConfigRegistry() { return this.configRegistry; }
 
   //Logging Methods
-  public static void logInfo (String msg, String origin) { logger.info(origin+": "+msg); }
-  public static void logWarn (String msg, String origin) { logger.warning(origin+": "+msg);}
-  public static void logSevere (String msg, String origin) { logger.severe(origin+": "+msg);}
+  public void logInfo (String msg, String origin) { logger.info("["+origin+"] "+msg); }
+  public void logWarn (String msg, String origin) { logger.warning("["+origin+"] "+msg);}
+  public void logSevere (String msg, String origin) { logger.severe("["+origin+"] "+msg);}
 }

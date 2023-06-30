@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandRegistry implements CommandExecutor {
+public final class CommandRegistry implements CommandExecutor {
 
     private final List<Command> commandList;
 

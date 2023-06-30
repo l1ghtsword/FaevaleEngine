@@ -10,23 +10,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConfigRegistry {
+public final class ConfigRegistry {
 
     private final Map<String,FileConfiguration> configList;
-    private final FaevaleEngine plugin = FaevaleEngine.getInstance();
 
-    public ConfigRegistry() { configList = new HashMap<>(); }
+    public ConfigRegistry() {
+        this.configList = new HashMap<>();
+    }
 
     public void addConfig(String componentName) {
         File configFile;
         FileConfiguration config;
 
-        configFile = new File(plugin.getDataFolder(), componentName + ".yml");
+        configFile = new File(FaevaleEngine.getInstance().getDataFolder(), componentName + ".yml");
 
         if (!configFile.exists()) {
             try { configFile.createNewFile(); }
             catch (IOException e) {
-                FaevaleEngine.logSevere("&4Unable to create " + configFile.getName() + ".yml. Check server storage permissions!", configFile.getName() + "Create");
+                FaevaleEngine.getInstance().logSevere("&4Unable to create " + configFile.getName() + ".yml. Check server storage permissions!", configFile.getName() + "Create");
                 return;
             }
         }
@@ -35,22 +36,26 @@ public class ConfigRegistry {
         config.options().copyDefaults(true);
         try { config.save(configFile); }
         catch(IOException e) {
-            FaevaleEngine.logSevere("&4Unable to save " + configFile.getName() + ".yml. ",configFile.getName() + "Save");
+            FaevaleEngine.getInstance().logSevere("&4Unable to save " + configFile.getName() + ".yml. ",configFile.getName() + "Save");
         }
-        configList.put(componentName, config);
+        FaevaleEngine.getInstance().logInfo("Before store "+config.getName(),"[ConfigRegistry]");
+        this.configList.put(componentName, config);
+        FaevaleEngine.getInstance().logInfo("After store "+this.configList.get(componentName).getName(),"[ConfigRegistry]");
     }
 
     public FileConfiguration getConfig(String componentName) {
-        return configList.get(componentName);
+
+        this.configList.forEach((k, v) -> FaevaleEngine.getInstance().logInfo("key: "+k+" Value: "+v.getName(),"ConfigRegistry"));
+        return this.configList.get(componentName);
     }
 
-    public void reloadConfig(String componentName) { YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), componentName + ".yml")); }
+    public void reloadConfig(String componentName) { YamlConfiguration.loadConfiguration(new File(FaevaleEngine.getInstance().getDataFolder(), componentName + ".yml")); }
 
     public void saveConfig(String componentName) {
         try {
-            configList.get(componentName).save(new File(plugin.getDataFolder(),componentName+".yml"));
+            this.configList.get(componentName).save(new File(FaevaleEngine.getInstance().getDataFolder(),componentName+".yml"));
         }catch(IOException e){
-            FaevaleEngine.logSevere("&4Unable to save BlockBreakComponent.yml. Check server storage permissions!",componentName+"Config");
+            FaevaleEngine.getInstance().logSevere("&4Unable to save BlockBreakComponent.yml. Check server storage permissions!",componentName+"Config");
         }
     }
 }

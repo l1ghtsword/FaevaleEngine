@@ -9,11 +9,9 @@ public class BlockBreakComponent extends Component {
 
     @Override
     public void onLoad(){
-        registerListener(new WildsBlockBreakListener(this.getComponentName()));
-        registerListener(new RegenerateBlockListener(this.getComponentName()));
-        registerListener(new GiveBlockDropsListener(this.getComponentName()));
-
-
+        registerListener(new WildsBlockBreakListener(getComponentName()));
+        registerListener(new RegenerateBlockListener(getComponentName()));
+        registerListener(new GiveBlockDropsListener(getComponentName()));
         registerConfig();
     }
 

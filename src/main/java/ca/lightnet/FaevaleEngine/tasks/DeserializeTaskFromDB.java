@@ -16,6 +16,6 @@ public class DeserializeTaskFromDB extends BukkitRunnable {
 
     @Override
     public void run() {
-        FaevaleEngine.logInfo("GETTING ID{"+id+"} from database!","DeserialTask");
+        FaevaleEngine.getInstance().logInfo("GETTING ID{"+id+"} from database!","DeserialTask");
     }
 }

@@ -12,8 +12,6 @@ import org.bukkit.event.EventPriority;
 
 public class WildsBlockBreakListener extends Listener {
 
-    private final FileConfiguration config = FaevaleEngine.getConfigRegistry().getConfig(getComponentName());
-
     public WildsBlockBreakListener(String componentName) { super(componentName); }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -28,8 +26,8 @@ public class WildsBlockBreakListener extends Listener {
         }
 
         //is user AFK?
-        if (!config.getBoolean("allowAFK", false)) {
-            if (FaevaleEngine.getEssentials().getUser(e.getPlayer()).isAfk()) {
+        if (!getConfig().getBoolean("allowAFK", false)) {
+            if (FaevaleEngine.getInstance().getEssentials().getUser(e.getPlayer()).isAfk()) {
                 e.setCancelMessage("&4You cannot do that while AFK");
                 e.setCancelled(true);
                 return;
@@ -37,13 +35,15 @@ public class WildsBlockBreakListener extends Listener {
         }
 
         //is block on the prop list?
-        for (String prop : config.getStringList("properties")) {
+        FaevaleEngine.getInstance().logInfo("Component name: "+getConfig().getName()+" - "+getConfig().getCurrentPath(),getComponentName());
+
+        for (String prop : getConfig().getStringList("properties")) {
             if (prop.startsWith(e.getMaterial().toString()+",")) {
-                e.setCancelMessage("");
+                e.suppressMessage();
                 Bukkit.getServer().getPluginManager().callEvent(new FaevaleDestroyEvent(e.getPlayer(),e.getMaterial(),e.getLocation(),e.getBlock().getBlockData(), e.getBlock().getDrops()));
         //Debugging message
-                if (config.getBoolean("debug",false)) {
-                    FaevaleEngine.logInfo(
+                if (getConfig().getBoolean("debug",false)) {
+                    FaevaleEngine.getInstance().logInfo(
                             e.getPlayer().getName()+" just broke "+e.getMaterial()+
                                     " - Wilderness: "+e.isInWilderness()+
                                     " - Op: "+e.getPlayer().isOp()+
@@ -57,4 +57,6 @@ public class WildsBlockBreakListener extends Listener {
         e.setCancelMessage("&4"+e.getMaterial().name()+" cannot be broken in the wild.");
         e.setCancelled(true);
     }
+
+    private FileConfiguration getConfig() { return FaevaleEngine.getInstance().getConfigRegistry().getConfig(getComponentName()); }
 }

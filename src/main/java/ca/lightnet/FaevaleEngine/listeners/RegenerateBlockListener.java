@@ -18,8 +18,6 @@ import java.util.UUID;
 
 public class RegenerateBlockListener extends Listener {
 
-    private final FileConfiguration config = FaevaleEngine.getConfigRegistry().getConfig(getComponentName());
-
     public RegenerateBlockListener(String componentName) { super(componentName); }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -58,11 +56,11 @@ public class RegenerateBlockListener extends Listener {
         }
 
         boolean regenerate = false;
-        Long timer = config.getLong("defaultTimer",100L);
-        Material placeholder = Material.getMaterial(config.getString("defaultPlaceholder","BEDROCK"));
+        Long timer = getConfig().getLong("defaultTimer",100L);
+        Material placeholder = Material.getMaterial(getConfig().getString("defaultPlaceholder","BEDROCK"));
 
         // Look for match and validate config results into variables
-        for (String obj : config.getStringList("properties")) {
+        for (String obj : getConfig().getStringList("properties")) {
             if (obj.startsWith(e.getMaterial().toString()+",")) {
                 String[] elements = obj.split(",");
 
@@ -90,8 +88,8 @@ public class RegenerateBlockListener extends Listener {
 
         //Database serialization
         String taskID = UUID.randomUUID().toString();
-        new SerializeTaskToDB(taskID,e.getLocation(),e.getBlockData()).runTask(getPlugin());
-        new DeserializeTaskFromDB(taskID).runTaskLater(getPlugin(), timer);
+        new SerializeTaskToDB(taskID,e.getLocation(),e.getBlockData()).runTask(FaevaleEngine.getInstance());
+        new DeserializeTaskFromDB(taskID).runTaskLater(FaevaleEngine.getInstance(), timer);
 
         if (e.getBlockData() instanceof Bisected) {
             Bisected block = (Bisected) e.getBlockData();
@@ -107,17 +105,19 @@ public class RegenerateBlockListener extends Listener {
 
 
             //Set both half's back after delay
-            new RespawnBlockTask(e.getLocation(),e.getBlockData()).runTaskLater(getPlugin(), timer);
-            new RespawnBlockTask(halfLoc,halfLoc.getBlock().getBlockData()).runTaskLater(getPlugin(), timer);
+            new RespawnBlockTask(e.getLocation(),e.getBlockData()).runTaskLater(FaevaleEngine.getInstance(), timer);
+            new RespawnBlockTask(halfLoc,halfLoc.getBlock().getBlockData()).runTaskLater(FaevaleEngine.getInstance(), timer);
 
 
             //Set placeholder block for both half's
-            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(getPlugin());
-            new RespawnBlockTask(halfLoc,Bukkit.createBlockData(placeholder)).runTask(getPlugin());
+            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(FaevaleEngine.getInstance());
+            new RespawnBlockTask(halfLoc,Bukkit.createBlockData(placeholder)).runTask(FaevaleEngine.getInstance());
         } else {
             //Set the 1 block broken in the event (default)
-            new RespawnBlockTask(e.getLocation(),e.getBlockData()).runTaskLater(getPlugin(), timer);
-            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(getPlugin());
+            new RespawnBlockTask(e.getLocation(),e.getBlockData()).runTaskLater(FaevaleEngine.getInstance(), timer);
+            new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(FaevaleEngine.getInstance());
         }
     }
+
+    private FileConfiguration getConfig() { return FaevaleEngine.getInstance().getConfigRegistry().getConfig(getComponentName()); }
 }

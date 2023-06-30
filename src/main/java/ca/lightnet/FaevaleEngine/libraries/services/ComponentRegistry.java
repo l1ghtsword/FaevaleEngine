@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ComponentRegistry {
+public final class ComponentRegistry {
 
     private final Map<String,Component> componentMap;
 
@@ -18,13 +18,9 @@ public class ComponentRegistry {
 
     public void load() { componentMap.forEach((k, v) -> v.onLoad()); }
 
-    public void saveAll() {
-        componentMap.forEach((k, v) -> v.onSave());
-    }
+    public void saveAll() { componentMap.forEach((k, v) -> v.onSave()); }
 
     public void reloadAll() { componentMap.forEach((k, v) -> v.onReload()); }
 
-    public void unload() {
-        componentMap.forEach((k, v) -> v.onUnload());
-    }
+    public void unload() { componentMap.forEach((k, v) -> v.onUnload()); }
 }

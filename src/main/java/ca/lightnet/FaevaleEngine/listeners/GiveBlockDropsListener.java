@@ -9,7 +9,7 @@ import org.bukkit.event.EventPriority;
 
 public class GiveBlockDropsListener extends Listener {
 
-    private final FileConfiguration config = FaevaleEngine.getConfigRegistry().getConfig(getComponentName());
+    private final FileConfiguration config = FaevaleEngine.getInstance().getConfigRegistry().getConfig(getComponentName());
 
     public GiveBlockDropsListener(String componentName) { super(componentName); }
 
