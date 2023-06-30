@@ -38,16 +38,10 @@ public final class ConfigRegistry {
         catch(IOException e) {
             FaevaleEngine.getInstance().logSevere("&4Unable to save " + configFile.getName() + ".yml. ",configFile.getName() + "Save");
         }
-        FaevaleEngine.getInstance().logInfo("Before store "+config.getName(),"[ConfigRegistry]");
         this.configList.put(componentName, config);
-        FaevaleEngine.getInstance().logInfo("After store "+this.configList.get(componentName).getName(),"[ConfigRegistry]");
     }
 
-    public FileConfiguration getConfig(String componentName) {
-
-        this.configList.forEach((k, v) -> FaevaleEngine.getInstance().logInfo("key: "+k+" Value: "+v.getName(),"ConfigRegistry"));
-        return this.configList.get(componentName);
-    }
+    public FileConfiguration getConfig(String componentName) { return this.configList.get(componentName); }
 
     public void reloadConfig(String componentName) { YamlConfiguration.loadConfiguration(new File(FaevaleEngine.getInstance().getDataFolder(), componentName + ".yml")); }
 
