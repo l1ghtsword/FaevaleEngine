@@ -3,7 +3,7 @@ package ca.lightnet.FaevaleEngine.libraries.utilities;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultConfig {
+public final class DefaultConfig {
 
     public static Map<String,Object> getDefaults(String componentName) {
         Map<String,Object> defaults = new HashMap<>();

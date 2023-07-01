@@ -8,8 +8,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public class DebugCommand extends Command {
 
-    FileConfiguration config = FaevaleEngine.getInstance().getConfigFile();
-
     public DebugCommand(String componentName) {
         super(componentName);
     }
@@ -36,10 +34,13 @@ public class DebugCommand extends Command {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        Boolean status = BoolUtils.toggleBool(config.getBoolean("debug",false));
-        config.set("debug",status);
+        Boolean status = BoolUtils.toggleBool(getConfig().getBoolean("debug",false));
+        getConfig().set("debug",status);
         FaevaleEngine.getInstance().logInfo("Debugging set to " + status,getComponentName());
-        sender.sendMessage("Debugging set to " + status);
+        sender.sendMessage("§d[§fFaevale§d] §f"+"Debugging set to " + status);
         return true;
+    }
+    private FileConfiguration getConfig() {
+        return FaevaleEngine.getInstance().getConfigFile();
     }
 }

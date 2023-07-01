@@ -1,4 +1,4 @@
-package ca.lightnet.FaevaleEngine.tasks;
+package ca.lightnet.FaevaleEngine.runnables;
 
 import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;

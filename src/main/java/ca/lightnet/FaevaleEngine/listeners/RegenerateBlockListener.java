@@ -3,28 +3,43 @@ package ca.lightnet.FaevaleEngine.listeners;
 import ca.lightnet.FaevaleEngine.FaevaleEngine;
 import ca.lightnet.FaevaleEngine.events.FaevaleDestroyEvent;
 import ca.lightnet.FaevaleEngine.libraries.models.objects.Listener;
-import ca.lightnet.FaevaleEngine.tasks.DeserializeTaskFromDB;
-import ca.lightnet.FaevaleEngine.tasks.RespawnBlockTask;
-import ca.lightnet.FaevaleEngine.tasks.SerializeTaskToDB;
+import ca.lightnet.FaevaleEngine.runnables.DeserializeTaskFromDB;
+import ca.lightnet.FaevaleEngine.runnables.RespawnBlockTask;
+import ca.lightnet.FaevaleEngine.runnables.SerializeTaskToDB;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.Bisected;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.util.Vector;
 
+import java.util.Locale;
 import java.util.UUID;
 
 public class RegenerateBlockListener extends Listener {
 
     public RegenerateBlockListener(String componentName) { super(componentName); }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onFaevaleBlockDestroy(FaevaleDestroyEvent e) {
 
         if(e.isCancelled()) { return; }
+        Location checkN;
+        Location checkE;
+        Location checkS;
+        Location checkW;
 
+
+        if(e.getMaterial() == Material.BAMBOO) {
+            checkN = e.getLocation().clone().subtract(0,0,1);
+            checkE = e.getLocation().clone().add(new Vector().setX(1).setY(0).setZ(0));
+            checkS = e.getLocation().clone().add(0,0,1);
+            checkW = e.getLocation().clone().subtract(1,0,0);
+        }
+
+
+        /*
         //Prevent breaking supporting block under plant, etc
         if (e.getMaterial().isSolid()) {
             Location checkUP = e.getLocation().clone().add(0,1,0);
@@ -82,7 +97,7 @@ public class RegenerateBlockListener extends Listener {
         //If Material is not on the regen list, prevent block break
         if(!regenerate) {
             e.setCancelled(true);
-            e.setCancelledMessage("&4"+e.getMaterial().name()+" cannot be broken in the wild.");
+            e.setCancelledMessage(e.getMaterial().name().toLowerCase(Locale.ROOT)+" cannot be broken in the wild.");
             return;
         }
 
@@ -117,7 +132,8 @@ public class RegenerateBlockListener extends Listener {
             new RespawnBlockTask(e.getLocation(),e.getBlockData()).runTaskLater(FaevaleEngine.getInstance(), timer);
             new RespawnBlockTask(e.getLocation(),Bukkit.createBlockData(placeholder)).runTask(FaevaleEngine.getInstance());
         }
+
+         */
     }
 
-    private FileConfiguration getConfig() { return FaevaleEngine.getInstance().getConfigRegistry().getConfig(getComponentName()); }
 }

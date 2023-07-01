@@ -1,4 +1,4 @@
-package ca.lightnet.FaevaleEngine.libraries.models.objects;
+package ca.lightnet.FaevaleEngine.libraries.models.objects.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
