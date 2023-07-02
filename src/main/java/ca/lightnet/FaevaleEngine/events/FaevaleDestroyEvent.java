@@ -16,13 +16,15 @@ public class FaevaleDestroyEvent extends FaevaleBlockActionEvent {
     private final BlockData blockData;
     private final Material material;
     private final Collection<ItemStack> drops;
+    private final String propString;
 
-    public FaevaleDestroyEvent(Player player, Location location, @Nullable BlockData blockData, @Nullable Material material, @Nullable Collection<ItemStack> drops) {
+    public FaevaleDestroyEvent(Player player, Location location, @Nullable BlockData blockData, @Nullable Material material, @Nullable Collection<ItemStack> drops, @Nullable String propString) {
         this.player = player;
         this.location = location;
         this.blockData = blockData;
         this.material = material;
         this.drops = drops;
+        this.propString = propString;
     }
 
 
@@ -50,4 +52,6 @@ public class FaevaleDestroyEvent extends FaevaleBlockActionEvent {
     public Player getPlayer() {
         return this.player;
     }
+
+    public String getPropString() { return this.propString; }
 }

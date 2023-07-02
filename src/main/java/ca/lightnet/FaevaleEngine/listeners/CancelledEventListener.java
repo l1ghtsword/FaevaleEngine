@@ -12,6 +12,6 @@ public class CancelledEventListener extends Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onCancelledEvent(Event e) {
         if(!e.isCancelled() || e.getPlayer() == null) { return; }
-        e.getPlayer().sendMessage("§d[§fFaevale§d] §4"+e.getCancelledMessage());
+        e.getPlayer().sendMessage("§d[§fFaevale§d] §4"+e.getCancelMessage());
     }
 }

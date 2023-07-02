@@ -5,12 +5,12 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class SerializeTaskToDB extends BukkitRunnable {
+public class SerializeRegenTaskToDB extends BukkitRunnable {
     private final String id;
     private final Location loc;
     private final BlockData bd;
 
-    public SerializeTaskToDB(String id, Location location, BlockData blockdata) {
+    public SerializeRegenTaskToDB(String id, Location location, BlockData blockdata) {
         this.id = id;
         this.loc = location;
         this.bd = blockdata;

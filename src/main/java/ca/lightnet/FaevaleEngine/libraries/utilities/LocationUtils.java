@@ -15,20 +15,29 @@ public final class LocationUtils {
     private final static List<Location> locations = new ArrayList<>();
     private static Material material;
 
+    public static Location getAbove(Location location) { return location.add(Direction.UP.getVector()); }
+
     public static List<Location> getAllLinearBlocks(Location currentLoc, Object block) {
+        boolean startFromTheBottom = true;
         material = getMaterial(block);
+
         if(material == null){ locations.add(currentLoc); return locations; }
 
-        //Find the bottom
-        do { currentLoc.add(Direction.DOWN.getVector());
-        } while (currentLoc.getBlock().getType() != material);
-
-        //Correct current position
-        currentLoc.add(Direction.UP.getVector());
-
-        //Add each location from bottom to top to the list
-        do { locations.add(currentLoc); currentLoc.add(Direction.UP.getVector());
-        } while (currentLoc.getBlock().getType() == material);
+        if(material.equals(Material.VINE)){
+            //Add top to bottom
+            do { currentLoc.add(Direction.UP.getVector());
+            } while (currentLoc.getBlock().getType() != material);
+            currentLoc.add(Direction.DOWN.getVector());
+            do { locations.add(currentLoc); currentLoc.add(Direction.DOWN.getVector());
+            } while (currentLoc.getBlock().getType() == material);
+        } else {
+            //Add bottom to top
+            do { currentLoc.add(Direction.DOWN.getVector());
+            } while (currentLoc.getBlock().getType() != material);
+            currentLoc.add(Direction.UP.getVector());
+            do { locations.add(currentLoc); currentLoc.add(Direction.UP.getVector());
+            } while (currentLoc.getBlock().getType() == material);
+        }
 
         return locations;
     }

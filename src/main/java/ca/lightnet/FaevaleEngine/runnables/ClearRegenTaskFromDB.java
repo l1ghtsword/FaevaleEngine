@@ -5,12 +5,12 @@ import org.bukkit.Location;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class DeserializeTaskFromDB extends BukkitRunnable {
+public class ClearRegenTaskFromDB extends BukkitRunnable {
     private final String id;
     private Location loc;
     private BlockData bd;
 
-    public DeserializeTaskFromDB(String id) {
+    public ClearRegenTaskFromDB(String id) {
         this.id = id;
     }
 
