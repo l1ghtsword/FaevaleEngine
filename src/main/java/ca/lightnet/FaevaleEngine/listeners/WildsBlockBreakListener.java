@@ -12,32 +12,33 @@ import org.bukkit.event.EventHandler;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import org.bukkit.event.EventPriority;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 public class WildsBlockBreakListener extends Listener {
-
-    private String propString = null;
 
     public WildsBlockBreakListener(String componentName) { super(componentName); }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onTownyWildsBlockDestroy(TownyDestroyEvent e) {
-
         if(isIgnored(e)) { return; }
 
         e.setCancelled(true);
+        String propString = null;
 
-        if(isPlayerAFK(e) || isNotOnList(e) || isSupportBlock(e)){ return; }
+        if(isPlayerAFK(e) || isSupportBlock(e)){ return; }
+
+        propString = getPropString(e);
+        if (propString == null) { return; }
 
         e.suppressMessage();
-
         Bukkit.getServer().getPluginManager().callEvent( new FaevaleDestroyEvent(
             e.getPlayer(),
             e.getLocation(),
             e.getBlock().getBlockData(),
             e.getMaterial(),
             e.getBlock().getDrops(),
-            getPropString()
+            propString
         ));
     }
 
@@ -65,20 +66,15 @@ public class WildsBlockBreakListener extends Listener {
         return false;
     }
 
-    private boolean isNotOnList(TownyDestroyEvent e) {
+    private @Nullable String getPropString(TownyDestroyEvent e) {
         for (String prop : getConfig().getStringList("properties")) {
             if (prop.startsWith(e.getMaterial().toString()+",")) {
-                setPropString(prop);
-                break; }
+                if (FaevaleEngine.getInstance().getConfig().getBoolean("debug")) { sendDebuggingMessage(e); }
+                return prop;
+            }
         }
-
-        if(getPropString() == null) {
-            if (FaevaleEngine.getInstance().getConfig().getBoolean("debug",false)) { sendDebuggingMessage(e); }
-            return false;
-        }
-
         e.setCancelMessage(e.getMaterial().name().toLowerCase(Locale.ROOT)+" cannot be broken in the wild.");
-        return true;
+        return null;
     }
 
     private boolean isPlayerAFK(TownyDestroyEvent e){
@@ -93,17 +89,15 @@ public class WildsBlockBreakListener extends Listener {
 
     private boolean isIgnored(TownyDestroyEvent e) {
         if (e.isCancelled() || !e.isInWilderness() || e.getPlayer().isOp() || !e.getPlayer().getGameMode().equals(GameMode.SURVIVAL))
-            { return true; }
+        { return true; }
         return false;
     }
-
-    private void setPropString(String s) { propString = s; }
-    private String getPropString() { return propString; }
 
     private void sendDebuggingMessage(TownyDestroyEvent e) {
         FaevaleEngine.getInstance().logInfo(
                 e.getPlayer().getName()+" just broke "+e.getMaterial()+
                         " - Wilderness: "+e.isInWilderness()+
+                        "\nLocation: "+e.getLocation().toString()+
                         " - Op: "+e.getPlayer().isOp()+
                         " - Gamemode: "+e.getPlayer().getGameMode(),getComponentName());
     }

@@ -28,8 +28,6 @@ public final class DefaultConfig {
                         "CACTUS,600,AIR",
                         "CARROTS,600,AIR",
                         "CARVED_PUMPKIN,460,AIR",
-                        "CAVE_VINES,100,AIR",
-                        "CAVE_VINES_PLANT,100,AIR",
                         "CHORUS_FLOWER,2400,AIR",
                         "CHORUS_FRUIT,2400,AIR",
                         "COBWEB,300,AIR",
