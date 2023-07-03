@@ -76,15 +76,37 @@ public class RegenerateBlockListener extends Listener {
 
     private void sendRegenerationTasks(FaevaleDestroyEvent e) {
         String taskID;
+        Location supportBlock = null;
         List<BukkitRunnable> saveToDB = new ArrayList<>();
         List<BukkitRunnable> clearFromDB = new ArrayList<>();
         List<BukkitRunnable> setPlaceholder = new ArrayList<>();
         List<BukkitRunnable> restoreBlockLater = new ArrayList<>();
 
+        //Condition only used when job requires support block first
+        if(!e.getMaterial().isSolid() || e.getMaterial().equals(Material.BAMBOO)) {
+            if(getLocations().get(0).getBlockY() <= getLocations().get(getLocations().size()-1).getBlockY()) {
+                supportBlock = LocationUtils.getBelow(getLocations().get(0));
+            }
+        }
+
         for(Location loc : getLocations()) {
-            FaevaleEngine.getInstance().logInfo(loc.toString(),"DEBUG");
+            if(FaevaleEngine.getInstance().getConfig().getBoolean("debug")) {
+                FaevaleEngine.getInstance().logInfo(loc.toString(), getComponentName());
+            }
 
             taskID = UUID.randomUUID().toString();
+
+            if(supportBlock != null) {
+                String supportTaskID = UUID.randomUUID().toString();
+                new RespawnBlockTask(supportBlock,supportBlock.getBlock().getBlockData())
+                        .runTaskLater(FaevaleEngine.getInstance(), getTimer()-1);
+                new SerializeRegenTaskToDB(supportTaskID,supportBlock,supportBlock.getBlock().getBlockData())
+                        .runTaskAsynchronously(FaevaleEngine.getInstance());
+                new ClearRegenTaskFromDB(supportTaskID)
+                        .runTaskLaterAsynchronously(FaevaleEngine.getInstance(), getTimer()-1);
+                supportBlock = null;
+            }
+
             setPlaceholder.add(new RespawnBlockTask(loc, Bukkit.createBlockData(placeholder)));
             restoreBlockLater.add(new RespawnBlockTask(loc,loc.getBlock().getBlockData()));
             saveToDB.add( new SerializeRegenTaskToDB(taskID,loc,loc.getBlock().getBlockData()));

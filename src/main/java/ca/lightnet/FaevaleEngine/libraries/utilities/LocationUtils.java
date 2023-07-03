@@ -72,8 +72,9 @@ public final class LocationUtils {
             if (start.getBlockY() < finish.getBlockY()) { i++; }
             else { i--; }
         }
-        locations.add(finish.clone()); //manually add finish as it always gets skipped (also handles start == finish condition);
-
+        //manually add finish as it always gets skipped (also handles start == finish condition);
+        locations.add(finish.clone());
+                       
         return locations;
     }
 
