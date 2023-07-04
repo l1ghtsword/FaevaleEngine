@@ -33,7 +33,7 @@ public class RegenerateBlockListener extends Listener {
         locations = new ArrayList<>();
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onFaevaleBlockDestroy(FaevaleDestroyEvent e) {
 
         if (e.isCancelled()) { return; }
@@ -107,9 +107,9 @@ public class RegenerateBlockListener extends Listener {
 
             if(supportBlock != null) {
                 String supportTaskID = UUID.randomUUID().toString();
-                new RespawnBlockTask(supportBlock,Bukkit.createBlockData(Material.JUNGLE_LOG))
+                new RespawnBlockTask(supportBlock,supportBlock.getBlock().getBlockData())
                         .runTaskLater(FaevaleEngine.getInstance(), getTimer()-1);
-                new SerializeRegenTaskToDB(supportTaskID,supportBlock,Bukkit.createBlockData(Material.JUNGLE_LOG))
+                new SerializeRegenTaskToDB(supportTaskID,supportBlock,supportBlock.getBlock().getBlockData())
                         .runTaskAsynchronously(FaevaleEngine.getInstance());
                 new ClearRegenTaskFromDB(supportTaskID)
                         .runTaskLaterAsynchronously(FaevaleEngine.getInstance(), getTimer()-1);

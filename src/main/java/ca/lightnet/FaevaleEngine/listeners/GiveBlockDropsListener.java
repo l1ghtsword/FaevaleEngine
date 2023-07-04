@@ -5,7 +5,6 @@ import ca.lightnet.FaevaleEngine.libraries.models.objects.Listener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +17,7 @@ public class GiveBlockDropsListener extends Listener {
 
     public GiveBlockDropsListener(String componentName) { super(componentName); }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler
     public void onFaevaleBlockDestroy(FaevaleDestroyEvent e) {
 
         if(e.isCancelled()) { return;}
