@@ -5,9 +5,12 @@ import ca.lightnet.FaevaleEngine.components.BlockBreakComponent;
 import ca.lightnet.FaevaleEngine.libraries.services.CommandRegistry;
 import ca.lightnet.FaevaleEngine.libraries.services.ComponentRegistry;
 import ca.lightnet.FaevaleEngine.libraries.services.ConfigRegistry;
+import ca.lightnet.FaevaleEngine.libraries.services.DatabaseService;
 import ca.lightnet.FaevaleEngine.listeners.CancelledEventListener;
 import com.earth2me.essentials.Essentials;
 import org.bukkit.Bukkit;
+
+import java.sql.Connection;
 import java.util.logging.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +22,7 @@ public final class FaevaleEngine extends JavaPlugin
   private CommandRegistry commandRegistry;
   private ConfigRegistry configRegistry;
   private FileConfiguration globalConfig;
+  private DatabaseService dbService;
   private Essentials essentials;
   private Logger logger;
   private String origin;
@@ -36,6 +40,9 @@ public final class FaevaleEngine extends JavaPlugin
     globalConfig = this.getConfig();
     globalConfig.options().copyDefaults(true);
     saveConfig();
+
+    //Load database connections
+    dbService = new DatabaseService();
 
     //Load configRegistry
     configRegistry = new ConfigRegistry();
@@ -72,6 +79,7 @@ public final class FaevaleEngine extends JavaPlugin
       componentRegistry.saveAll();
       componentRegistry.unload();
     }
+    dbService.closeConnections();
     componentRegistry = null;
     commandRegistry = null;
     configRegistry = null;
@@ -84,6 +92,7 @@ public final class FaevaleEngine extends JavaPlugin
   public Essentials getEssentials() { return this.essentials; }
   public CommandRegistry getCommandRegistry() { return this.commandRegistry; }
   public ConfigRegistry getConfigRegistry() { return this.configRegistry; }
+  public Connection getDBConnection() { return this.dbService.getConnection(); }
 
   //Logging Methods
   public void logInfo (String msg, String origin) { logger.info("["+origin+"] "+msg); }
