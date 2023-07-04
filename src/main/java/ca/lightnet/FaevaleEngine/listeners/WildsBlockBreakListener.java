@@ -8,11 +8,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import com.palmergames.bukkit.towny.event.actions.TownyDestroyEvent;
 import org.bukkit.event.EventPriority;
+import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.Locale;
 
 public class WildsBlockBreakListener extends Listener {
@@ -37,7 +41,7 @@ public class WildsBlockBreakListener extends Listener {
             e.getLocation(),
             e.getBlock().getBlockData(),
             e.getMaterial(),
-            e.getBlock().getDrops(),
+            calcDrops(e.getBlock(),e.getPlayer()),
             propString
         ));
     }
@@ -91,6 +95,14 @@ public class WildsBlockBreakListener extends Listener {
         if (e.isCancelled() || !e.isInWilderness() || e.getPlayer().isOp() || !e.getPlayer().getGameMode().equals(GameMode.SURVIVAL))
         { return true; }
         return false;
+    }
+
+    private Collection<ItemStack> calcDrops(Block block, Player player) {
+        if(player.getItemInUse() == null) {
+            return block.getDrops();
+        } else {
+            return block.getDrops(player.getItemInUse(),player);
+        }
     }
 
     private void sendDebuggingMessage(TownyDestroyEvent e) {
