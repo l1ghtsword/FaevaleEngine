@@ -10,6 +10,9 @@ import ca.lightnet.FaevaleEngine.runnables.SerializeRegenTaskToDB;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Cocoa;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -82,11 +85,21 @@ public class RegenerateBlockListener extends Listener {
         List<BukkitRunnable> setPlaceholder = new ArrayList<>();
         List<BukkitRunnable> restoreBlockLater = new ArrayList<>();
 
-        //Condition only used when job requires support block first
+        //Condition only used when job requires support block under stack first
         if(!e.getMaterial().isSolid() || e.getMaterial().equals(Material.BAMBOO)) {
             if(getLocations().get(0).getBlockY() <= getLocations().get(getLocations().size()-1).getBlockY()) {
                 supportBlock = LocationUtils.getBelow(getLocations().get(0));
             }
+        }
+
+        //Special exception only for Cocoa because they are annoying...
+        if(e.getBlockData() instanceof Cocoa) {
+            BlockFace f = ((Cocoa) getLocations().get(0).getBlock().getBlockData()).getFacing();
+            int xmod = f.getModX();
+            int zmod = f.getModZ();
+            if(e.getLocation().getBlockX() < 0) { xmod++; }
+            if(e.getLocation().getBlockZ() < 0) { zmod++; }
+            supportBlock = e.getLocation().clone().add(xmod,0,zmod);
         }
 
         for(Location loc : getLocations()) {
