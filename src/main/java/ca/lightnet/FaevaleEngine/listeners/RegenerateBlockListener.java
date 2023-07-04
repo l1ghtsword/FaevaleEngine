@@ -94,12 +94,8 @@ public class RegenerateBlockListener extends Listener {
 
         //Special exception only for Cocoa because they are annoying...
         if(e.getBlockData() instanceof Cocoa) {
-            BlockFace f = ((Cocoa) getLocations().get(0).getBlock().getBlockData()).getFacing();
-            int xmod = f.getModX();
-            int zmod = f.getModZ();
-            if(e.getLocation().getBlockX() < 0) { xmod++; }
-            if(e.getLocation().getBlockZ() < 0) { zmod++; }
-            supportBlock = e.getLocation().clone().add(xmod,0,zmod);
+            BlockFace face = ((Cocoa) getLocations().get(0).getBlock().getBlockData()).getFacing();
+            supportBlock = e.getLocation().clone().add(face.getModX(),0,face.getModZ());
         }
 
         for(Location loc : getLocations()) {
@@ -111,9 +107,9 @@ public class RegenerateBlockListener extends Listener {
 
             if(supportBlock != null) {
                 String supportTaskID = UUID.randomUUID().toString();
-                new RespawnBlockTask(supportBlock,supportBlock.getBlock().getBlockData())
+                new RespawnBlockTask(supportBlock,Bukkit.createBlockData(Material.JUNGLE_LOG))
                         .runTaskLater(FaevaleEngine.getInstance(), getTimer()-1);
-                new SerializeRegenTaskToDB(supportTaskID,supportBlock,supportBlock.getBlock().getBlockData())
+                new SerializeRegenTaskToDB(supportTaskID,supportBlock,Bukkit.createBlockData(Material.JUNGLE_LOG))
                         .runTaskAsynchronously(FaevaleEngine.getInstance());
                 new ClearRegenTaskFromDB(supportTaskID)
                         .runTaskLaterAsynchronously(FaevaleEngine.getInstance(), getTimer()-1);
