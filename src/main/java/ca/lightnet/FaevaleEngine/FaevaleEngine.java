@@ -83,6 +83,7 @@ public final class FaevaleEngine extends JavaPlugin
     componentRegistry = null;
     commandRegistry = null;
     configRegistry = null;
+    logInfo("All components shut down, Plugin disabled!", origin);
   }
 
   public static FaevaleEngine getInstance() {
