@@ -12,8 +12,8 @@ public abstract class Event extends org.bukkit.event.Event implements Cancellabl
 
     public boolean isCancelled() { return this.cancelled; }
     public void setCancelled(boolean b) { this.cancelled = b; }
-    public String getCancelMessage() { return this.cancelledMessage; }
-    public void setCancelMessage(String msg) { this.cancelledMessage = msg; }
+    public String getCancelledMessage() { return this.cancelledMessage; }
+    public void setCancelledMessage(String msg) { this.cancelledMessage = msg; }
 
     @Override
     public HandlerList getHandlers() { return handlers; }

@@ -33,7 +33,7 @@ public class RegenerateBlockListener extends Listener {
         locations = new ArrayList<>();
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onFaevaleBlockDestroy(FaevaleDestroyEvent e) {
 
         if (e.isCancelled()) { return; }
