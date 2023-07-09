@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.util.logging.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import javax.annotation.Nullable;
 
 public final class FaevaleEngine extends JavaPlugin
 {
@@ -93,7 +94,7 @@ public final class FaevaleEngine extends JavaPlugin
   public Essentials getEssentials() { return this.essentials; }
   public CommandRegistry getCommandRegistry() { return this.commandRegistry; }
   public ConfigRegistry getConfigRegistry() { return this.configRegistry; }
-  public Connection getDBConnection() { return this.dbService.getConnection(); }
+  public @Nullable Connection getDBConnection() { return this.dbService.getConnection(); }
 
   //Logging Methods
   public void logInfo (String msg, String origin) { logger.info("["+origin+"] "+msg); }

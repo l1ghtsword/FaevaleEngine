@@ -109,7 +109,7 @@ public class RegenerateBlockListener extends Listener {
                 String supportTaskID = UUID.randomUUID().toString();
                 new RespawnBlockTask(supportBlock,supportBlock.getBlock().getBlockData())
                         .runTaskLater(FaevaleEngine.getInstance(), getTimer()-1);
-                new SerializeRegenTaskToDB(supportTaskID,supportBlock,supportBlock.getBlock().getBlockData())
+                new SerializeRegenTaskToDB(supportTaskID,supportBlock,supportBlock.getBlock().getBlockData(),getTimer()-1)
                         .runTaskAsynchronously(FaevaleEngine.getInstance());
                 new ClearRegenTaskFromDB(supportTaskID)
                         .runTaskLaterAsynchronously(FaevaleEngine.getInstance(), getTimer()-1);
@@ -118,7 +118,7 @@ public class RegenerateBlockListener extends Listener {
 
             setPlaceholder.add(new RespawnBlockTask(loc, Bukkit.createBlockData(placeholder)));
             restoreBlockLater.add(new RespawnBlockTask(loc,loc.getBlock().getBlockData()));
-            saveToDB.add( new SerializeRegenTaskToDB(taskID,loc,loc.getBlock().getBlockData()));
+            saveToDB.add( new SerializeRegenTaskToDB(taskID,loc,loc.getBlock().getBlockData(),getTimer()));
             clearFromDB.add( new ClearRegenTaskFromDB(taskID));
         }
         setPlaceholder.forEach( (task) -> task.runTask(FaevaleEngine.getInstance()));
